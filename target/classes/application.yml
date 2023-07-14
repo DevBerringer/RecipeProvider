@@ -1,4 +1,0 @@
-####### active env #######
-spring:
-  profiles:
-    active: local
