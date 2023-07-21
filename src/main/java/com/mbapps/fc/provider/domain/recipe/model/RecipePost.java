@@ -1,5 +1,6 @@
 package com.mbapps.fc.provider.domain.recipe.model;
 
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
