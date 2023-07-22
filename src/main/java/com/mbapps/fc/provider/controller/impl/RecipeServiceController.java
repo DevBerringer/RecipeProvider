@@ -42,7 +42,7 @@ public class RecipeServiceController  {
 
     @PostMapping("/insert")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RecipeResponseDTO> InsertRecipe(InsertRecipeRequestDTO insertRequestDTO) {
+    public ResponseEntity<RecipeResponseDTO> InsertRecipe(@RequestBody InsertRecipeRequestDTO insertRequestDTO) {
         LOGGER.info("Received recipe insert Request");
         try {
             if (verificationUtil.validateInsertRequest(insertRequestDTO)) {

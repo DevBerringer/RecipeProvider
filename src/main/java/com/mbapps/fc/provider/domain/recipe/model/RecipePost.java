@@ -39,6 +39,9 @@ public class RecipePost {
     private String description;
 
     @NotBlank
+    private double prepTimeMin;
+
+    @NotBlank
     private double cookTimeMin;
 
     @NotBlank
@@ -49,13 +52,15 @@ public class RecipePost {
     @NotBlank
     private List<String> steps;
 
-    private Double rating;
+    @NotBlank
+    private List<String> foodType;
+
+    private List<Double> rating;
 
     private List<String> comments;
 
+    private String createdBy;
+
     private Date createdDate;
-
-    private Set<User> createdBy;
-
 }
 

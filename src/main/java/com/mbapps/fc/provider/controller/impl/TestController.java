@@ -1,8 +1,10 @@
 package com.mbapps.fc.provider.controller.impl;
 
-import com.mbapps.fc.provider.payload.request.InsertRecipeRequestDTO;
 import com.mbapps.fc.provider.payload.response.RecipeResponseDTO;
+import com.mbapps.fc.provider.payload.response.AuthResponse;
+import com.mbapps.fc.provider.payload.response.UserInfoResponse;
 import com.mbapps.fc.provider.service.RecipeService;
+import com.mbapps.fc.provider.service.UserService;
 import com.mbapps.fc.provider.util.VerificationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +22,14 @@ public class TestController {
     private static Logger LOGGER = LoggerFactory.getLogger(RecipeServiceController.class);
 
     private final RecipeService recipeService;
+
+    private final UserService userService;
+
     private final VerificationUtil verificationUtil;
 
-    public TestController(RecipeService recipeService, VerificationUtil verificationUtil) {
+    public TestController(RecipeService recipeService, UserService userService, VerificationUtil verificationUtil) {
         this.recipeService = recipeService;
+        this.userService = userService;
         this.verificationUtil = verificationUtil;
     }
 
@@ -35,8 +41,15 @@ public class TestController {
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public String userAccess() {
-        return "User Content.";
+    public ResponseEntity<UserInfoResponse> userAccess() {
+        try {
+            UserInfoResponse response = userService.getUserOnAuth();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
+        }
     }
 
     @GetMapping("/mod")
@@ -51,22 +64,4 @@ public class TestController {
         return "Admin Board.";
     }
 
-    @PostMapping("/insert")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<RecipeResponseDTO> InsertRecipe(InsertRecipeRequestDTO insertRequestDTO) {
-        LOGGER.info("Received recipe insert Request");
-        try {
-            if (verificationUtil.validateInsertRequest(insertRequestDTO)) {
-                RecipeResponseDTO response = recipeService.insertRecipe(insertRequestDTO);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            }
-        } catch (ResponseStatusException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
-        }
-
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-
-    }
 }

@@ -47,7 +47,7 @@ public class RecipeDTO {
     private List<String> steps;
 
     @JsonProperty("Rating")
-    private Double rating;
+    private List<Double> rating;
 
     @JsonProperty("Comments")
     private List<String> comments;

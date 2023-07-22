@@ -26,11 +26,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -76,6 +72,15 @@ public class AuthController {
                         userDetails.getUsername(),
                         userDetails.getEmail(),
                         roles));
+    }
+
+    @GetMapping("/signOut")
+    public ResponseEntity<?> removeAuthenticateUser() {
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add(HttpHeaders.SET_COOKIE, "TFC=; Max-Age=0; Path=/; sameSite=none; HttpOnly; Secure");
+
+        return ResponseEntity.ok().headers(responseHeaders).body(new MessageResponse("User Logged Out successfully!"));
     }
 
     @PostMapping("/signup")

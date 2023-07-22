@@ -21,18 +21,18 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 public class UserDTO {
 
-    @JsonProperty("Id")
+    @JsonProperty("id")
     private String id;
 
-    @JsonProperty("Username")
+    @JsonProperty("username")
     private String username;
 
-    @JsonProperty("Email")
+    @JsonProperty("email")
     private String email;
 
-    @JsonProperty("Password")
+    @JsonProperty("password")
     private String password;
 
-    @JsonProperty("Roles")
+    @JsonProperty("roles")
     private Set<Role> roles = new HashSet<>();
 }
