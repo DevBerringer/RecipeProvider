@@ -1,7 +1,7 @@
 package com.mbapps.fc.provider.security.services;
 
-import com.mbapps.fc.provider.domain.recipe.model.User;
-import com.mbapps.fc.provider.domain.recipe.repository.UserRepository;
+import com.mbapps.fc.provider.services.recipe.domain.model.User;
+import com.mbapps.fc.provider.services.recipe.domain.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
