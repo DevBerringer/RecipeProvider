@@ -6,7 +6,6 @@ import com.mbapps.fc.provider.services.user.domain.payload.response.AllUsersResp
 import com.mbapps.fc.provider.services.user.domain.payload.response.UserInfoResponse;
 import com.mbapps.fc.provider.services.user.service.UserService;
 import com.mbapps.fc.provider.util.VerificationUtil;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
