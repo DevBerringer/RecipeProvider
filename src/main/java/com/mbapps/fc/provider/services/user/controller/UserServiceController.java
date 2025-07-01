@@ -6,6 +6,8 @@ import com.mbapps.fc.provider.services.user.domain.payload.response.AllUsersResp
 import com.mbapps.fc.provider.services.user.domain.payload.response.UserInfoResponse;
 import com.mbapps.fc.provider.services.user.service.UserService;
 import com.mbapps.fc.provider.util.VerificationUtil;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,19 @@ public class UserServiceController  {
         LOGGER.info("Received all Users request");
         try {
             AllUsersResponseDTO response = userService.getAllUsers();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
+        }
+    }
+
+    @PostMapping("/user/{email}")
+    public ResponseEntity<UserInfoResponse> GetUser(@PathParam("email") String email) {
+        LOGGER.info("Received all Users request");
+        try {
+            UserInfoResponse response = userService.getCurrentUser(email);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ResponseStatusException e) {
             throw e;

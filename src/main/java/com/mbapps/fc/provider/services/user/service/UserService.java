@@ -1,6 +1,6 @@
 package com.mbapps.fc.provider.services.user.service;
 
-import com.mbapps.fc.provider.services.recipe.domain.mapper.UserMapper;
+import com.mbapps.fc.provider.services.user.domain.mapper.UserMapper;
 import com.mbapps.fc.provider.services.recipe.domain.model.User;
 import com.mbapps.fc.provider.services.recipe.domain.repository.UserRepository;
 import com.mbapps.fc.provider.services.user.domain.payload.request.UpdateProfileRequest;
@@ -47,6 +47,19 @@ public class UserService {
             LOGGER.warn(e.getMessage());
             throw e;
         }
+    }
+
+    public UserInfoResponse getCurrentUser(String email) {
+//        UserDTO userDTO = new UserDTO();
+//        Optional<User> user = userRepository.getByEmail(email);
+//
+//        if (user.isPresent()) {
+//            userDTO = userMapper.userToUserDTO(user.get());
+//        }
+//
+//        return UserInfoResponse;
+    return null;
+
     }
 
     public UserInfoResponse getUserOnAuth() {

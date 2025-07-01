@@ -43,7 +43,9 @@ public class RecipeService {
         RecipeResponseDTO responseDto = new RecipeResponseDTO().success(false);
         try {
             List<RecipePost> recipePostList = recipeRepository.findAll();
-            responseDto.recipeDTOs(recipeMapper.recipePostListToRecipeDtoList(recipePostList)).message("success").success(true);
+            responseDto.recipeDTOs(
+                    RecipeMapper.recipePostListToRecipeDtoList(recipePostList))
+                    .message("success").success(true);
 
             return responseDto;
 

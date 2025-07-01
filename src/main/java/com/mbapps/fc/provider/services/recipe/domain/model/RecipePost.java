@@ -1,6 +1,5 @@
 package com.mbapps.fc.provider.services.recipe.domain.model;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,8 +22,6 @@ import java.util.List;
 public class RecipePost {
     @Id
     private String id;
-
-    private String picture;
 
     @NotBlank
     @Size(max = 50)
@@ -51,6 +48,8 @@ public class RecipePost {
 
     @NotBlank
     private List<String> foodTypes;
+
+    private String picture;
 
     private List<Double> rating;
 

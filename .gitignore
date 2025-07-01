@@ -1,0 +1,66 @@
+# Compiled class files
+**/target/
+**/out/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Maven local repository (if ever configured inside project)
+.mvn/
+
+# IntelliJ IDEA / JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# NetBeans files
+nbproject/private/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+*.env.*
+
+# Application-specific config files (if you use any local-only config)
+application-local.properties
+application-dev.properties
+
+# Docker artifacts (if using)
+*.pid
+docker-compose.override.yml
+
+# Build artifacts
+build/
+bin/
+
+# Node/npm files (if you have a frontend folder)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Test reports
+test-output/
+
+# Coverage reports
+coverage/
+jacoco.exec
+
+# Logs directory (if you use a logs folder)
+logs/

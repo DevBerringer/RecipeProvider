@@ -34,7 +34,7 @@ public class RecipeMapper {
 
         for (RecipePost recipe : entity) {
             RecipeDTO recipeDTO = new RecipeDTO();
-            recipeDTO.id(recipe.id().toString());
+            recipeDTO.id(recipe.id());
             recipeDTO.name(recipe.name());
             recipeDTO.picture(recipe.picture());
             recipeDTO.spicyLevel(recipe.spicyLevel());

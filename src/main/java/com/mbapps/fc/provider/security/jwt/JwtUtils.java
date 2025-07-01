@@ -42,14 +42,13 @@ public class JwtUtils {
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt)
+        return ResponseCookie.from(jwtCookie, jwt)
                 .path("/")
                 .maxAge(24 * 60 * 60)
                 .httpOnly(true)
                 .sameSite("None") // Set to "None" for cross-origin cookies
                 .secure(true)     // Set to true when using HTTPS
                 .build();
-        return cookie;
     }
 
     public String getUserNameFromJwtToken(String token) {

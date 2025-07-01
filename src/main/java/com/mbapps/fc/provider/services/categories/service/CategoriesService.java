@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoriesService {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(CategoriesService.class);
     @Autowired
     private FoodTypeRepository foodTypeRepository;
 

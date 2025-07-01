@@ -1,6 +1,5 @@
 package com.mbapps.fc.provider.security.controller;
 
-import com.mbapps.fc.provider.services.categories.controller.CategoriesController;
 import com.mbapps.fc.provider.services.recipe.domain.model.ERole;
 import com.mbapps.fc.provider.services.recipe.domain.model.Role;
 import com.mbapps.fc.provider.services.recipe.domain.model.User;
