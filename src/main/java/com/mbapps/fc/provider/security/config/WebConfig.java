@@ -23,8 +23,10 @@ public class WebConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        config.addAllowedOrigin("http://localhost:5173");
-        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app");
+        // Allow localhost, production, and all vercel preview domains
+        config.addAllowedOriginPattern("http://localhost:5173");
+        config.addAllowedOriginPattern("https://thecozycookbookwebui.vercel.app");
+        config.addAllowedOriginPattern("https://*.vercel.app");
 
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
@@ -39,18 +41,17 @@ public class WebConfig {
                 HttpMethod.DELETE.name()
         ));
 
-        // Expose Set-Cookie header so browser can receive cookies from the response
         config.setExposedHeaders(Arrays.asList(
                 HttpHeaders.SET_COOKIE,
                 HttpHeaders.AUTHORIZATION
         ));
 
-        config.setMaxAge(7200L);  // cache preflight response for 2 hours
+        config.setMaxAge(7200L);
 
         source.registerCorsConfiguration("/**", config);
 
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(-102);  // run this filter early
+        bean.setOrder(-102);
 
         return bean;
     }
