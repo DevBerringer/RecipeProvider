@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  data:
+    mongodb:
+      authentication-database: admin
+      uri: ${SPRING_DATA_MONGODB_URI}
+
+app:
+  cookie:
+    secure: ${APP_COOKIE_SECURE}
