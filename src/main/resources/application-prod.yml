@@ -1,13 +1,27 @@
 spring:
-  config:
-    activate:
-      on-profile: prod
+  profiles:
+    active: prod
 
   data:
     mongodb:
       authentication-database: admin
       uri: ${SPRING_DATA_MONGODB_URI}
 
+server:
+  port: 8082
+
+family-cookbook:
+  app:
+    jwt-cookie-name: TFC
+    jwt-secret: ========================TFC=Spring==============================
+    jwt-expiration-ms: 86400000
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.mbapps.rc.provider: INFO
+
 app:
   cookie:
-    secure: ${APP_COOKIE_SECURE}
+    secure: ${APP_COOKIE_SECURE:true}
