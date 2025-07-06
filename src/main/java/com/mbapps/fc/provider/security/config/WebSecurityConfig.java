@@ -1,32 +1,32 @@
-package com.mbapps.fc.provider.config;
+package com.mbapps.fc.provider.security.config;
 
 import com.mbapps.fc.provider.security.jwt.AuthEntryPointJwt;
 import com.mbapps.fc.provider.security.jwt.AuthTokenFilter;
 import com.mbapps.fc.provider.security.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig  {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -55,21 +55,40 @@ public class WebSecurityConfig  {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/user/all").permitAll()
-                                .requestMatchers("/api/recipe/all").permitAll()
-                                .requestMatchers("/api/categories/all").permitAll()
-                                .anyRequest().authenticated()
-                );
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        configureAuthMatchers(http);
+        configureHeaders(http);
 
         return http.build();
+    }
+
+    private void configureAuthMatchers(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth ->
+                auth.requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/user/all").permitAll()
+                        .requestMatchers("/api/recipe/all").permitAll()
+                        .requestMatchers("/api/categories/all").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/health").permitAll()
+                        .anyRequest().authenticated()
+        );
+    }
+
+    private void configureHeaders(HttpSecurity http) throws Exception {
+        http.headers(headers -> headers
+                .xssProtection(Customizer.withDefaults())
+                .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'"))
+                .frameOptions(Customizer.withDefaults())
+                .httpStrictTransportSecurity(hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(31536000L))
+                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
+                .addHeaderWriter((request, response) ->
+                        response.setHeader("Permissions-Policy", "geolocation=(self), microphone=()")
+                )
+        );
     }
 }

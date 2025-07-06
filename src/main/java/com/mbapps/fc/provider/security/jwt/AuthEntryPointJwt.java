@@ -1,7 +1,8 @@
 package com.mbapps.fc.provider.security.jwt;
 
-
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus; // Import HttpStatus
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -27,17 +29,18 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
             throws IOException {
         logger.error("Unauthorized error: {}", authException.getMessage());
 
+        Instant now = Instant.now();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
         final Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("status", HttpStatus.UNAUTHORIZED.value());
         body.put("error", "Unauthorized");
         body.put("message", authException.getMessage());
         body.put("path", request.getServletPath());
+        body.put("timestamp", Date.from(now));
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
     }
-
 }

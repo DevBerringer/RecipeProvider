@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
-public class TestController {
+public class UserController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(RecipeServiceController.class);
 
@@ -26,16 +26,10 @@ public class TestController {
 
     private final VerificationUtil verificationUtil;
 
-    public TestController(RecipeService recipeService, UserService userService, VerificationUtil verificationUtil) {
+    public UserController(RecipeService recipeService, UserService userService, VerificationUtil verificationUtil) {
         this.recipeService = recipeService;
         this.userService = userService;
         this.verificationUtil = verificationUtil;
-    }
-
-
-    @GetMapping("/all")
-    public String allAccess() {
-        return "Public Content.";
     }
 
     @GetMapping("/user")

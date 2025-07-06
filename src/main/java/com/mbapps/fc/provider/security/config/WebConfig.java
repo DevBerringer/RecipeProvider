@@ -1,4 +1,4 @@
-package com.mbapps.fc.provider.config;
+package com.mbapps.fc.provider.security.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,8 @@ public class WebConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:5173");
-        config.addAllowedOrigin("https://thecozycookbookwebui-git-setup-blake-devberringers-projects.vercel.app");
+        config.addAllowedOrigin("https://thecozycookbookwebui-9gruzmh91-devberringers-projects.vercel.app");
+        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app/");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,

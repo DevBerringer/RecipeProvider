@@ -3,15 +3,11 @@ package com.mbapps.fc.provider.services.recipe.domain.payload.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.Data;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Accessors(fluent = true)
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 public class InsertRecipeRequestDTO {
 
@@ -19,14 +15,20 @@ public class InsertRecipeRequestDTO {
     @JsonProperty("Name")
     private String name;
 
-    @JsonProperty("Picture")
-    private String picture;
+    @JsonProperty("FoodTypes")
+    private List<String> foodTypes;
+
+    @JsonProperty("MealTypes")
+    private List<String> mealTypes;
+
+    @JsonProperty("CuisineTypes")
+    private List<String> cuisineTypes;
+
+    @JsonProperty("IsVegetarian")
+    private Boolean isVegetarian;
 
     @JsonProperty("SpicyLevel")
     private Boolean spicyLevel;
-
-    @JsonProperty("Description")
-    private String description;
 
     @JsonProperty("CookTimeMin")
     private Integer cookTimeMin;
@@ -34,14 +36,23 @@ public class InsertRecipeRequestDTO {
     @JsonProperty("PrepTimeMin")
     private Integer prepTimeMin;
 
-    @JsonProperty("FoodTypes")
-    private List<String> foodTypes;
+    @JsonProperty("Serves")
+    private Integer serves;
+
+    @JsonProperty("Description")
+    private String description;
 
     @JsonProperty("Ingredients")
     private List<String> ingredients;
 
     @JsonProperty("Steps")
     private List<String> steps;
+
+    @JsonProperty("SelectedImage")
+    private String selectedImage;
+
+    @JsonProperty("Rating")
+    private List<Integer> rating;
 
     @JsonProperty("CreatedBy")
     private String createdBy;

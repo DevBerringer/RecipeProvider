@@ -1,9 +1,11 @@
 package com.mbapps.fc.provider.services.recipe.controller;
 
+import com.mbapps.fc.provider.services.recipe.domain.dto.RecipeDTO;
 import com.mbapps.fc.provider.services.recipe.domain.payload.request.InsertRecipeRequestDTO;
 import com.mbapps.fc.provider.services.recipe.domain.payload.response.RecipeResponseDTO;
 import com.mbapps.fc.provider.services.recipe.service.RecipeService;
 import com.mbapps.fc.provider.util.VerificationUtil;
+import jakarta.ws.rs.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,35 @@ public class RecipeServiceController  {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
         }
     }
+
+    @GetMapping("/paged")
+    public ResponseEntity<RecipeResponseDTO> getPagedRecipes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int pageSize) {
+        LOGGER.info("Received paginated recipes request: page {}, size {}", page, pageSize);
+        try {
+            RecipeResponseDTO response = recipeService.getPagedRecipes(page, pageSize);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecipeDTO> getRecipesById(@PathVariable("id") String id) {
+        LOGGER.info("Received recipe: {}", id);
+        try {
+            RecipeDTO response = recipeService.getById(id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
+        }
+    }
+
 
     @PostMapping("/insert")
     @PreAuthorize("hasRole('ADMIN')")

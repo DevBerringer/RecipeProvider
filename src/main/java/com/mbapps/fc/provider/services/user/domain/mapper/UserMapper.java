@@ -23,12 +23,12 @@ public class UserMapper {
     public UserDTO userToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
 
-        userDTO.id(user.getId());
-        userDTO.username(user.getUsername());
-        userDTO.email(user.getEmail());
-        userDTO.groups(new ArrayList<>(user.getGroups()));
-        userDTO.description(user.getDescription());
-        userDTO.imagePath(user.getImagePath());
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setGroups(new ArrayList<>(user.getGroups()));
+        userDTO.setDescription(user.getDescription());
+        userDTO.setImagePath(user.getImagePath());
 
         return userDTO;
     }

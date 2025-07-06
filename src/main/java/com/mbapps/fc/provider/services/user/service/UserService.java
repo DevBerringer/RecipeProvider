@@ -95,11 +95,11 @@ public class UserService {
     public UserInfoResponse updateUser(UpdateProfileRequest updateProfileRequest) {
         UserDetailsImpl userDetails = getAuth();
 
-        Optional<User> existingUser = userRepository.findById(updateProfileRequest.Id());
-        if (existingUser.isPresent() && userDetails.getId().equals(updateProfileRequest.Id())) {
+        Optional<User> existingUser = userRepository.findById(updateProfileRequest.getId());
+        if (existingUser.isPresent() && userDetails.getId().equals(updateProfileRequest.getId())) {
             User user = existingUser.get();
-            user.setImagePath(updateProfileRequest.imagePath());
-            user.setDescription(updateProfileRequest.description());
+            user.setImagePath(updateProfileRequest.getImagePath());
+            user.setDescription(updateProfileRequest.getDescription());
 
             userRepository.save(user);
         } else {
@@ -109,8 +109,8 @@ public class UserService {
         }
 
         return new UserInfoResponse()
-                    .description(updateProfileRequest.description())
-                    .imagePath(updateProfileRequest.imagePath());
+                    .description(updateProfileRequest.getDescription())
+                    .imagePath(updateProfileRequest.getImagePath());
     }
 
     private UserDetailsImpl getAuth() {

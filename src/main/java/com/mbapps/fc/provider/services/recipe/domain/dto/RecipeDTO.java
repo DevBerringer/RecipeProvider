@@ -2,20 +2,14 @@ package com.mbapps.fc.provider.services.recipe.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Accessors(fluent = true)
+@Data
+@Builder
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 public class RecipeDTO {
 
@@ -28,8 +22,8 @@ public class RecipeDTO {
     @JsonProperty("Picture")
     private String picture;
 
-    @JsonProperty("SpicyLevel")
-    private boolean spicyLevel;
+    @JsonProperty("isSpicy")
+    private boolean isSpicy;
 
     @JsonProperty("Description")
     private String description;
@@ -43,6 +37,18 @@ public class RecipeDTO {
     @JsonProperty("FoodTypes")
     private List<String> foodTypes;
 
+    @JsonProperty("MealTypes")
+    private List<String> mealTypes;
+
+    @JsonProperty("CuisineTypes")
+    private List<String> cuisineTypes;
+
+    @JsonProperty("IsVegetarian")
+    private boolean isVegetarian;
+
+    @JsonProperty("Serves")
+    private Integer serves;
+
     @JsonProperty("Ingredients")
     private List<String> ingredients;
 
@@ -50,7 +56,7 @@ public class RecipeDTO {
     private List<String> steps;
 
     @JsonProperty("Rating")
-    private List<Double> rating;
+    private List<Integer> rating;
 
     @JsonProperty("Comments")
     private List<String> comments;

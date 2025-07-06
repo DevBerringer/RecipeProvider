@@ -1,12 +1,15 @@
 package com.mbapps.fc.provider.security.jwt;
 
-import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.mbapps.fc.provider.security.services.UserDetailsImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +21,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import javax.crypto.SecretKey;
+
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
@@ -28,6 +33,11 @@ public class JwtUtils {
     @Value("${family-cookbook.app.jwt-expiration-ms}")
     private int jwtExpirationMs;
 
+    @Value("${app.cookie.secure:true}")
+    private boolean secureCookie;
+
+
+    @Getter
     @Value("${family-cookbook.app.jwt-cookie-name}")
     private String jwtCookie;
 
@@ -40,29 +50,58 @@ public class JwtUtils {
         }
     }
 
+    public ResponseCookie getCleanJwtCookie() {
+        return ResponseCookie.from(jwtCookie, "")
+                .path("/")
+                .maxAge(0)
+                .sameSite("lax")
+                .httpOnly(true)
+                .secure(secureCookie)
+                .build();
+    }
+
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         return ResponseCookie.from(jwtCookie, jwt)
                 .path("/")
                 .maxAge(24 * 60 * 60)
+                .sameSite("lax")
                 .httpOnly(true)
-                .sameSite("None") // Set to "None" for cross-origin cookies
-                .secure(true)     // Set to true when using HTTPS
+                .secure(secureCookie)
                 .build();
     }
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().getSubject();
+    public String generateTokenFromUsername(String username) {
+        Instant now = Instant.now();
+        Instant expiration = now.plusMillis(jwtExpirationMs);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", username);  // 'sub' is the standard JWT claim for subject
+
+        return Jwts.builder()
+                .claims(claims)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(expiration))
+                .signWith(key(), Jwts.SIG.HS256)
+                .compact();
     }
 
-    private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parser()
+                .verifyWith(key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            Jwts.parser()
+                    .verifyWith(key())
+                    .build()
+                    .parseSignedClaims(authToken);
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
@@ -77,12 +116,7 @@ public class JwtUtils {
         return false;
     }
 
-    public String generateTokenFromUsername(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
-                .compact();
+    private SecretKey key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 }

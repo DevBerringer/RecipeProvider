@@ -1,5 +1,6 @@
 package com.mbapps.fc.provider.services.user.domain.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mbapps.fc.provider.services.recipe.domain.model.Group;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.http.ResponseCookie;
 
 import java.util.List;
 
@@ -36,5 +38,8 @@ public class UserInfoResponse {
 
     @JsonProperty("Groups")
     private List<Group> groups;
+
+    @JsonIgnore
+    private ResponseCookie cookie;
 
 }

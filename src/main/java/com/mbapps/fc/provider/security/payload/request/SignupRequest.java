@@ -3,52 +3,23 @@ package com.mbapps.fc.provider.security.payload.request;
 import java.util.Set;
 
 import jakarta.validation.constraints.*;
+import lombok.Data;
 
+@Data
 public class SignupRequest {
-    @NotBlank
-    @Size(min = 3, max = 20)
+    @NotBlank(message = "Username is mandatory")
+    @Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters")
     private String username;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email must be valid")
     private String email;
 
-    private Set<String> roles;
-
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[!@#$%^&*]).+$",
+            message = "Password must contain at least one number and one special character (!@#$%^&*)")
     private String password;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<String> getRoles() {
-        return this.roles;
-    }
-
-    public void setRole(Set<String> roles) {
-        this.roles = roles;
-    }
+    private Set<String> roles;
 }

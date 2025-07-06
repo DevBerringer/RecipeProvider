@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,10 +14,9 @@ import java.util.List;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "RecipePost")
-@Accessors(fluent = true)
 public class RecipePost {
     @Id
     private String id;
@@ -28,7 +26,7 @@ public class RecipePost {
     private String name;
 
     @NotBlank
-    private boolean spicyLevel;
+    private boolean isSpicy;
 
     @NotBlank
     @Size(max = 500)
@@ -49,15 +47,21 @@ public class RecipePost {
     @NotBlank
     private List<String> foodTypes;
 
+    private List<String> mealTypes;
+
+    private List<String> cuisineTypes;
+
+    private boolean isVegetarian;
+
+    private Integer serves;
+
     private String picture;
 
-    private List<Double> rating;
+    private List<Integer> rating;
 
     private List<String> comments;
 
     private String createdBy;
 
     private Date createdDate;
-
 }
-

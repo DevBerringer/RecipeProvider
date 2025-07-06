@@ -1,15 +1,14 @@
 package com.mbapps.fc.provider.services.user.controller;
 
-import com.mbapps.fc.provider.services.recipe.controller.RecipeServiceController;
 import com.mbapps.fc.provider.services.user.domain.payload.request.UpdateProfileRequest;
 import com.mbapps.fc.provider.services.user.domain.payload.response.AllUsersResponseDTO;
 import com.mbapps.fc.provider.services.user.domain.payload.response.UserInfoResponse;
 import com.mbapps.fc.provider.services.user.service.UserService;
 import com.mbapps.fc.provider.util.VerificationUtil;
 import jakarta.ws.rs.PathParam;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +17,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/user")
 public class UserServiceController  {
-    private static Logger LOGGER = LoggerFactory.getLogger(RecipeServiceController.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(UserServiceController.class);
 
-    @Autowired
     private final UserService userService;
-
-    @Autowired
     private final VerificationUtil verificationUtil;
-
-    public UserServiceController(UserService userService, VerificationUtil verificationUtil) {
-        this.userService = userService;
-        this.verificationUtil = verificationUtil;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<AllUsersResponseDTO> GetAllUsers() {
@@ -61,7 +53,7 @@ public class UserServiceController  {
 
     @PostMapping("/updateProfile")
     public ResponseEntity<UserInfoResponse> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
-        LOGGER.info("Update requset for user: " + updateProfileRequest.Id());
+        LOGGER.info("Update requset for user: " + updateProfileRequest.getId());
         try {
             UserInfoResponse response = userService.updateUser(updateProfileRequest);
             return new ResponseEntity<>(response, HttpStatus.OK);

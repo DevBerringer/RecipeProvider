@@ -5,7 +5,6 @@ import com.mbapps.fc.provider.services.recipe.domain.model.RecipePost;
 import com.mbapps.fc.provider.services.recipe.domain.payload.request.InsertRecipeRequestDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,45 +12,76 @@ import java.util.List;
 public class RecipeMapper {
 
     public static RecipePost insertRecipeDTOToRecipe(InsertRecipeRequestDTO entity) {
-        RecipePost newRecipe = new RecipePost();
-        newRecipe.name(entity.name());
-        newRecipe.picture(entity.picture());
-        newRecipe.spicyLevel(entity.spicyLevel());
-        newRecipe.description(entity.description());
-        newRecipe.cookTimeMin(entity.cookTimeMin());
-        newRecipe.prepTimeMin(entity.prepTimeMin());
-        newRecipe.foodTypes(entity.foodTypes());
-        newRecipe.ingredients(entity.ingredients());
-        newRecipe.steps(entity.steps());
-        newRecipe.createdBy(entity.createdBy());
-        newRecipe.createdDate(new Date());
-
-        return newRecipe;
+        return RecipePost.builder()
+                .name(entity.getName())
+                .mealTypes(entity.getMealTypes())
+                .picture(entity.getSelectedImage())
+                .isSpicy(entity.getSpicyLevel())
+                .description(entity.getDescription())
+                .cookTimeMin(entity.getCookTimeMin())
+                .prepTimeMin(entity.getPrepTimeMin())
+                .foodTypes(entity.getFoodTypes())
+                .ingredients(entity.getIngredients())
+                .steps(entity.getSteps())
+                .isVegetarian(entity.getIsVegetarian())
+                .serves(entity.getServes())
+                .cuisineTypes(entity.getCuisineTypes())
+                .rating(entity.getRating())
+                .createdBy(entity.getCreatedBy())
+                .createdDate(new Date())
+                .build();
     }
 
+
     public static List<RecipeDTO> recipePostListToRecipeDtoList(List<RecipePost> entity) {
-        List<RecipeDTO> recipeDTOs = new ArrayList<>();
+        return entity.stream()
+                .map(recipe -> RecipeDTO.builder()
+                        .id(recipe.getId())
+                        .name(recipe.getName())
+                        .picture(recipe.getPicture())
+                        .isSpicy(recipe.isSpicy())
+                        .description(recipe.getDescription())
+                        .prepTimeMin(recipe.getPrepTimeMin())
+                        .cookTimeMin(recipe.getCookTimeMin())
+                        .foodTypes(recipe.getFoodTypes())
+                        .ingredients(recipe.getIngredients())
+                        .steps(recipe.getSteps())
+                        .rating(recipe.getRating())
+                        .comments(recipe.getComments())
+                        .createdBy(recipe.getCreatedBy())
+                        .createdDate(recipe.getCreatedDate())
+                        .mealTypes(recipe.getMealTypes())
+                        .cuisineTypes(recipe.getCuisineTypes())
+                        .isVegetarian(recipe.isVegetarian())
+                        .serves(recipe.getServes())
+                        .build())
+                .toList();
+    }
 
-        for (RecipePost recipe : entity) {
-            RecipeDTO recipeDTO = new RecipeDTO();
-            recipeDTO.id(recipe.id());
-            recipeDTO.name(recipe.name());
-            recipeDTO.picture(recipe.picture());
-            recipeDTO.spicyLevel(recipe.spicyLevel());
-            recipeDTO.description(recipe.description());
-            recipeDTO.prepTimeMin(recipe.prepTimeMin());
-            recipeDTO.cookTimeMin(recipe.cookTimeMin());
-            recipeDTO.foodTypes(recipe.foodTypes());
-            recipeDTO.ingredients(recipe.ingredients());
-            recipeDTO.steps(recipe.steps());
-            recipeDTO.rating(recipe.rating());
-            recipeDTO.comments(recipe.comments());
-            recipeDTO.createdBy(recipe.createdBy());
-            recipeDTO.createdDate(recipe.createdDate());
-
-            recipeDTOs.add(recipeDTO);
+    public static RecipeDTO recipePostToRecipeDTO(RecipePost recipePost) {
+        if (recipePost == null) {
+            return null;
         }
 
-        return recipeDTOs;
+        return RecipeDTO.builder()
+                .id(recipePost.getId())
+                .name(recipePost.getName())
+                .picture(recipePost.getPicture())
+                .isSpicy(recipePost.isSpicy())
+                .description(recipePost.getDescription())
+                .prepTimeMin(recipePost.getPrepTimeMin())
+                .cookTimeMin(recipePost.getCookTimeMin())
+                .foodTypes(recipePost.getFoodTypes())
+                .mealTypes(recipePost.getMealTypes())
+                .cuisineTypes(recipePost.getCuisineTypes())
+                .isVegetarian(recipePost.isVegetarian())
+                .serves(recipePost.getServes())
+                .ingredients(recipePost.getIngredients())
+                .steps(recipePost.getSteps())
+                .rating(recipePost.getRating())
+                .comments(recipePost.getComments())
+                .createdBy(recipePost.getCreatedBy())
+                .createdDate(recipePost.getCreatedDate())
+                .build();
     }
 }
