@@ -2,7 +2,6 @@ package com.mbapps.fc.provider.services.categories.controller;
 
 import com.mbapps.fc.provider.services.categories.domain.payload.response.CategoriesResponseDto;
 import com.mbapps.fc.provider.services.categories.service.CategoriesService;
-import com.mbapps.fc.provider.services.recipe.controller.RecipeServiceController;
 import com.mbapps.fc.provider.util.VerificationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

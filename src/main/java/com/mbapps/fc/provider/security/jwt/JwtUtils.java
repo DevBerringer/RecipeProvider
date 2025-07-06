@@ -36,7 +36,6 @@ public class JwtUtils {
     @Value("${app.cookie.secure:true}")
     private boolean secureCookie;
 
-
     @Getter
     @Value("${family-cookbook.app.jwt-cookie-name}")
     private String jwtCookie;
@@ -55,7 +54,7 @@ public class JwtUtils {
                 .path("/")
                 .maxAge(0)
                 .sameSite("lax")
-                .httpOnly(true)
+                .httpOnly(false)
                 .secure(secureCookie)
                 .build();
     }
@@ -66,7 +65,7 @@ public class JwtUtils {
                 .path("/")
                 .maxAge(24 * 60 * 60)
                 .sameSite("lax")
-                .httpOnly(true)
+                .httpOnly(false)
                 .secure(secureCookie)
                 .build();
     }

@@ -20,5 +20,5 @@ public class MealType {
     private String name;
 
     @NotBlank
-    private String ImgPath;
+    private String imagePath;
 }
