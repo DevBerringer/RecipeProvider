@@ -1,4 +1,4 @@
-package com.mbapps.fc.provider.security.config;
+package com.mbapps.fc.provider.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -19,40 +19,25 @@ public class WebConfig {
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-
-        // Allow localhost, production, and all vercel preview domains
-        config.addAllowedOriginPattern("http://localhost:5173");
-        config.addAllowedOriginPattern("https://thecozycookbookwebui.vercel.app");
-        config.addAllowedOriginPattern("https://*.vercel.app");
-
+        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT
         ));
-
         config.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name()
         ));
-
-        config.setExposedHeaders(Arrays.asList(
-                HttpHeaders.SET_COOKIE,
-                HttpHeaders.AUTHORIZATION
-        ));
-
         config.setMaxAge(7200L);
-
         source.registerCorsConfiguration("/**", config);
-
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(-102);
-
         return bean;
     }
 }
