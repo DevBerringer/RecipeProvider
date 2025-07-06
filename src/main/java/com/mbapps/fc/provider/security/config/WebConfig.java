@@ -23,12 +23,8 @@ public class WebConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        // Add your allowed origins here
-        config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "https://thecozycookbookwebui-9gruzmh91-devberringers-projects.vercel.app",
-                "https://thecozycookbookwebui.vercel.app"
-        ));
+        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app");
 
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
