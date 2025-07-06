@@ -17,17 +17,23 @@ import java.util.Arrays;
 public class WebConfig {
 
     @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");
-        config.addAllowedOrigin("https://thecozycookbookwebui-9gruzmh91-devberringers-projects.vercel.app");
-        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app");
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",
+                "https://thecozycookbookwebui-9gruzmh91-devberringers-projects.vercel.app",
+                "https://thecozycookbookwebui.vercel.app"
+        ));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT
+        ));
+        config.setExposedHeaders(Arrays.asList(
+                HttpHeaders.SET_COOKIE,
+                HttpHeaders.AUTHORIZATION
         ));
         config.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
@@ -37,8 +43,6 @@ public class WebConfig {
         ));
         config.setMaxAge(7200L);
         source.registerCorsConfiguration("/**", config);
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(-102);
-        return bean;
+        return new CorsFilter(source);
     }
 }
