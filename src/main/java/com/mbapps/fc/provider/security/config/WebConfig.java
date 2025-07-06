@@ -23,7 +23,7 @@ public class WebConfig {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("https://thecozycookbookwebui-9gruzmh91-devberringers-projects.vercel.app");
-        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app/");
+        config.addAllowedOrigin("https://thecozycookbookwebui.vercel.app");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
