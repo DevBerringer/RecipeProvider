@@ -2,9 +2,7 @@ package com.mbapps.fc.provider.services.user.controller;
 
 import com.mbapps.fc.provider.services.recipe.controller.RecipeServiceController;
 import com.mbapps.fc.provider.services.user.domain.payload.response.UserInfoResponse;
-import com.mbapps.fc.provider.services.recipe.service.RecipeService;
 import com.mbapps.fc.provider.services.user.service.UserService;
-import com.mbapps.fc.provider.util.VerificationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,16 +18,10 @@ public class UserController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(RecipeServiceController.class);
 
-    private final RecipeService recipeService;
-
     private final UserService userService;
 
-    private final VerificationUtil verificationUtil;
-
-    public UserController(RecipeService recipeService, UserService userService, VerificationUtil verificationUtil) {
-        this.recipeService = recipeService;
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.verificationUtil = verificationUtil;
     }
 
     @GetMapping("/user")
