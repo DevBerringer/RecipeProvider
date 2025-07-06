@@ -36,7 +36,7 @@ public class JwtUtils {
     @Value("${family-cookbook.app.jwt-expiration-ms}")
     private int jwtExpirationMs;
 
-    @Value("${app.cookie.secure:true}")
+    @Value("#{environment['APP_COOKIE_SECURE'] ?: 'true'}")
     private boolean secureCookie;
 
     @Getter
