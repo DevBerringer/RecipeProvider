@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE}
-
   data:
     mongodb:
       authentication-database: admin
