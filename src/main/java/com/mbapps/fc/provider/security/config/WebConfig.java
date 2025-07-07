@@ -20,8 +20,8 @@ public class WebConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true); // Allow cookies, authorization headers etc.
-        configuration.setAllowedOrigins(List.of( // Use List.of for immutable list
+        configuration.setAllowCredentials(true); // Allow cookies, authorization headers, etc.
+        configuration.setAllowedOrigins(List.of( // Use List.of for an immutable list
                 "http://localhost:5173",
                 "https://thecozycookbookwebui.vercel.app"
         ));

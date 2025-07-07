@@ -22,3 +22,10 @@ logging:
 app:
   cookie:
     secure: ${APP_COOKIE_SECURE}
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  region: ${AWS_REGION:us-east-2}
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME}

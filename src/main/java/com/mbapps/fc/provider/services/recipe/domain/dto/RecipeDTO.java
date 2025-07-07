@@ -19,8 +19,8 @@ public class RecipeDTO {
     @JsonProperty("Name")
     private String name;
 
-    @JsonProperty("Picture")
-    private String picture;
+    @JsonProperty("SelectedImage")
+    private String selectedImage;
 
     @JsonProperty("isSpicy")
     private boolean isSpicy;

@@ -46,7 +46,6 @@ public class AuthController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add(HttpHeaders.SET_COOKIE, clearedCookie.toString());
 
-
         return ResponseEntity.ok()
                 .headers(responseHeaders)
                 .body(new MessageResponse("User logged out successfully!"));
