@@ -21,6 +21,9 @@ public class RecipeResponseDTO {
     @JsonProperty("Success")
     private boolean success;
 
+    @JsonProperty("Total")
+    private long totalCount;
+
     @JsonProperty("RecipeDTOs")
     private List<RecipeDTO> recipeDTOs;
 }

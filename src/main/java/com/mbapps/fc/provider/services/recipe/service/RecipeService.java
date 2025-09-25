@@ -2,15 +2,15 @@ package com.mbapps.fc.provider.services.recipe.service;
 
 import com.mbapps.fc.provider.services.recipe.domain.dto.RecipeDTO;
 import com.mbapps.fc.provider.services.recipe.domain.payload.request.InsertRecipeRequestDTO;
+import com.mbapps.fc.provider.services.recipe.domain.payload.request.RecipeFilters;
 import com.mbapps.fc.provider.services.recipe.domain.payload.response.RecipeResponseDTO;
 import com.mbapps.fc.provider.services.recipe.domain.mapper.RecipeMapper;
 import com.mbapps.fc.provider.services.recipe.domain.model.RecipePost;
 import com.mbapps.fc.provider.services.recipe.domain.repository.RecipeRepository;
 import com.mbapps.fc.provider.security.services.UserDetailsImpl;
+import com.mbapps.fc.provider.services.recipe.domain.repository.RecipeRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,10 +25,12 @@ import java.util.Optional;
 public class RecipeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
-    @Autowired
-    private RecipeRepository recipeRepository;
-    @Autowired
-    private RecipeMapper recipeMapper;
+
+    private final RecipeRepository recipeRepository;
+
+    public RecipeService(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
 
     public RecipeDTO getById(String id) {
         try {
@@ -59,20 +61,19 @@ public class RecipeService {
         }
     }
 
-    public RecipeResponseDTO getPagedRecipes(int page, int pageSize) {
+    public RecipeResponseDTO getPagedRecipes(int page, int pageSize, RecipeFilters filters) {
         RecipeResponseDTO responseDto = new RecipeResponseDTO().success(false);
         try {
             Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "name"));
-            Page<RecipePost> pageResult = recipeRepository.findAll(pageable);
-            List<RecipePost> recipePostList = pageResult.getContent();
+            List<RecipePost> recipePostList = recipeRepository.findFilteredRecipes(filters, pageable);
+            long total = recipeRepository.countFilteredRecipes(filters);
 
-            responseDto.recipeDTOs(
-                            RecipeMapper.recipePostListToRecipeDtoList(recipePostList))
+            responseDto.recipeDTOs(RecipeMapper.recipePostListToRecipeDtoList(recipePostList))
                     .message("success")
-                    .success(true);
+                    .success(true)
+                    .totalCount(total);
 
             return responseDto;
-
         } catch (Exception e) {
             LOGGER.warn(e.getMessage());
             throw e;
