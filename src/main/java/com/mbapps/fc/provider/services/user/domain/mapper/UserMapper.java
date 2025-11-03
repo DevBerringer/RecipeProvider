@@ -25,7 +25,6 @@ public class UserMapper {
 
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
         userDTO.setGroups(new ArrayList<>(user.getGroups()));
         userDTO.setDescription(user.getDescription());
         userDTO.setImagePath(user.getImagePath());

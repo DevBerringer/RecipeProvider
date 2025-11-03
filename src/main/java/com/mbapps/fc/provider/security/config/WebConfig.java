@@ -1,4 +1,4 @@
-package com.mbapps.fc.provider.config;
+package com.mbapps.fc.provider.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,11 @@ public class WebConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true); // Allow cookies, authorization headers, etc.
         configuration.setAllowedOrigins(List.of( // Use List.of for an immutable list
-                "http://localhost:5173",
+                "http://localhost:5174",
                 "https://thecozycookbookwebui.vercel.app"
         ));
+        configuration.setAllowCredentials(true); // Allow cookies, authorization headers, etc.
         configuration.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
@@ -43,7 +43,4 @@ public class WebConfig {
         source.registerCorsConfiguration("/**", configuration); // Apply to all paths
         return source;
     }
-
-    // Removed the FilterRegistrationBean<CorsFilter> bean from here,
-    // as Spring Security will handle the CorsConfigurationSource directly.
 }

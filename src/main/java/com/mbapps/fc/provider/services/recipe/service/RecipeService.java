@@ -45,22 +45,6 @@ public class RecipeService {
         return RecipeDTO.builder().build();
     }
 
-    public RecipeResponseDTO getAllRecipes() {
-        RecipeResponseDTO responseDto = new RecipeResponseDTO().success(false);
-        try {
-            List<RecipePost> recipePostList = recipeRepository.findAll();
-            responseDto.recipeDTOs(
-                    RecipeMapper.recipePostListToRecipeDtoList(recipePostList))
-                    .message("success").success(true);
-
-            return responseDto;
-
-        } catch (Exception e) {
-            LOGGER.warn(e.getMessage());
-            throw e;
-        }
-    }
-
     public RecipeResponseDTO getPagedRecipes(int page, int pageSize, RecipeFilters filters) {
         RecipeResponseDTO responseDto = new RecipeResponseDTO().success(false);
         try {

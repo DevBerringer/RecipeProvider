@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/test")
 public class UserController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(RecipeServiceController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecipeServiceController.class);
 
     private final UserService userService;
 

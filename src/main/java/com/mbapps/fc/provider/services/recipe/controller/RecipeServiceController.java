@@ -31,19 +31,6 @@ public class RecipeServiceController  {
         this.verificationUtil = verificationUtil;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<RecipeResponseDTO> GetAllRecipes() {
-      LOGGER.info("Received all recipes request");
-        try {
-            RecipeResponseDTO response = recipeService.getAllRecipes();
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Occurred", e);
-        }
-    }
-
     @GetMapping("/paged")
     public ResponseEntity<RecipeResponseDTO> getPagedRecipes(
             @RequestParam(defaultValue = "0") int page,

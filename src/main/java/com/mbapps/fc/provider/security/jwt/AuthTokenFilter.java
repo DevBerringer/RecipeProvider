@@ -36,6 +36,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
+            String path = request.getRequestURI();
+            if (path.startsWith("/api/auth/") ||
+                path.startsWith("/api/categories/all") ||
+                    path.startsWith("/actuator/**") ||
+                    path.startsWith("/health")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             String jwt = jwtUtils.getJwtFromCookies(request);
 
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
