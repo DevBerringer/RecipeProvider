@@ -39,14 +39,20 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String path = request.getRequestURI();
             if (path.startsWith("/api/auth/") ||
                 path.startsWith("/api/categories/all") ||
-                    path.startsWith("/actuator/**") ||
-                    path.startsWith("/health")) {
+                    path.startsWith("/actuator/") ||
+                    path.equals("/health")) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            String jwt = jwtUtils.getJwtFromCookies(request);
+            // Get JWT from Authorization header (Bearer token) or cookies (backward compatibility)
+            String jwt = jwtUtils.getJwtFromRequest(request);
 
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            if (jwt != null && !jwt.trim().isEmpty() && jwtUtils.validateJwtToken(jwt)) {
+                // For access tokens, also validate it's an access token (not refresh token)
+                if (!jwtUtils.validateAccessToken(jwt)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);

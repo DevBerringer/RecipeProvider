@@ -2,8 +2,11 @@ package com.mbapps.fc.provider.security.services;
 
 import com.mbapps.fc.provider.security.jwt.JwtUtils;
 import com.mbapps.fc.provider.security.payload.request.LoginRequest;
+import com.mbapps.fc.provider.security.payload.request.RefreshTokenRequest;
 import com.mbapps.fc.provider.security.payload.request.SignupRequest;
+import com.mbapps.fc.provider.security.payload.response.LoginResponse;
 import com.mbapps.fc.provider.security.payload.response.MessageResponse;
+import com.mbapps.fc.provider.security.payload.response.TokenResponse;
 import com.mbapps.fc.provider.services.recipe.domain.model.ERole;
 import com.mbapps.fc.provider.services.recipe.domain.model.Role;
 import com.mbapps.fc.provider.services.recipe.domain.model.User;
@@ -71,6 +74,79 @@ public class AuthServiceImpl implements AuthService {
                 .email(userDetails.getEmail())
                 .roles(roles)
                 .cookie(jwtCookie);
+    }
+
+    @Override
+    public LoginResponse authenticateUser(LoginRequest loginRequest) {
+        LOGGER.info("Authenticating user: {}", loginRequest.getUsername());
+
+        Authentication authentication = authenticate(loginRequest);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        // Generate access token and refresh token
+        String accessToken = jwtUtils.generateAccessToken(userDetails.getUsername());
+        String refreshToken = jwtUtils.generateRefreshToken(userDetails.getUsername());
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        LOGGER.info("Authentication successful for user: {}", loginRequest.getUsername());
+
+        LoginResponse response = new LoginResponse();
+        response.id(userDetails.getId())
+                .username(userDetails.getUsername())
+                .email(userDetails.getEmail())
+                .roles(roles);
+        
+        // Set LoginResponse-specific fields
+        response.accessToken(accessToken);
+        response.refreshToken(refreshToken);
+        response.message("Login successful");
+
+        return response;
+    }
+
+    @Override
+    public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        LOGGER.info("Refreshing token");
+
+        String refreshToken = refreshTokenRequest.getRefreshToken();
+        
+        if (refreshToken == null || refreshToken.trim().isEmpty()) {
+            LOGGER.error("Refresh token is null or empty");
+            throw new IllegalArgumentException("Refresh token is required");
+        }
+
+        // Validate refresh token
+        if (!jwtUtils.validateRefreshToken(refreshToken)) {
+            LOGGER.error("Invalid or expired refresh token");
+            throw new RuntimeException("Invalid or expired refresh token");
+        }
+
+        // Extract username from refresh token
+        String username;
+        try {
+            username = jwtUtils.getUserNameFromJwtToken(refreshToken);
+            if (username == null || username.trim().isEmpty()) {
+                LOGGER.error("Username extracted from refresh token is empty");
+                throw new RuntimeException("Invalid refresh token: missing user information");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Failed to extract username from refresh token: {}", e.getMessage());
+            throw new RuntimeException("Invalid or expired refresh token", e);
+        }
+
+        // Generate new access token
+        String newAccessToken = jwtUtils.generateAccessToken(username);
+
+        // Optionally rotate refresh token (generate new one)
+        String newRefreshToken = jwtUtils.generateRefreshToken(username);
+
+        LOGGER.info("Token refresh successful for user: {}", username);
+
+        return new TokenResponse(newAccessToken, newRefreshToken);
     }
 
     @Override

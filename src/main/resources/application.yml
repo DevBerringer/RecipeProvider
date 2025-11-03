@@ -14,8 +14,9 @@ server:
 family-cookbook:
   app:
     jwt-cookie-name: TFC
-    jwt-secret: ========================TFC=Spring==============================
-    jwt-expiration-ms: 86400000
+    jwt-secret: ${JWT_SECRET:========================TFC=Spring==============================}
+    jwt-expiration-ms: 1800000  # 30 minutes for access token
+    jwt-refresh-expiration-ms: 1209600000  # 14 days for refresh token
 
 logging:
   level:
